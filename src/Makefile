@@ -12,7 +12,7 @@ ifeq ($(UNAME_S), Linux)
 	LINK_FLAGS += -lm -lsubunit
 endif
 
-all: clean s21_string.a test gcov_report
+all: rebuild gcov_report
 
 s21_string.a:
 	$(CC) $(FLAGS) -c $(STRING)
@@ -35,9 +35,12 @@ ifeq ($(UNAME_S), Darwin)
 endif
 
 clean: 
-	rm -fr *.o *.a *.gch *.gcno *.gcda test gcov_test s21_test.info ./report test
+	rm -fr *.o *.gch *.gcno *.gcda test gcov_test s21_test.info ./report test
 
-rebuild: clean test 
+clean_lib:
+	rm -rf *.a
+
+rebuild: clean clean_lib s21_string.a 
 
 gcov_report: 
 	$(CC) $(FLAGS) $(GCOV_FLAGS) ${TEST_LIB} ${STRING} ${LINK_FLAGS} -o test
